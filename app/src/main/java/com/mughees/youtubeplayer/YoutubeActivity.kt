@@ -38,6 +38,8 @@ class YoutubeActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListen
         Log.d(TAG, "onInitialisationSuccess: youTubePlayer is ($youTubePlayer?.javaClass")
         Toast.makeText(this, "Initialised Youtube Player successfully", Toast.LENGTH_SHORT).show()
 
+        youTubePlayer?.setPlayerStateChangeListener(playerStateChangeListener)
+        youTubePlayer?.setPlaybackEventListener(playbackEventListener)
         if (!wasRestored) {
             youTubePlayer?.cueVideo(YOUTUBE_VIDEO_ID)
         }
@@ -57,6 +59,49 @@ class YoutubeActivity : YouTubeBaseActivity(), YouTubePlayer.OnInitializedListen
             val errorMessage = "There was an error in initialising the YoutubePlayer " +
                     "($youTubeInitializationResult)"
             Toast.makeText(this, errorMessage,Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private val playbackEventListener = object: YouTubePlayer.PlaybackEventListener {
+        override fun onSeekTo(p0: Int) {
+        }
+
+        override fun onBuffering(p0: Boolean) {
+        }
+
+        override fun onPlaying() {
+            Toast.makeText(this@YoutubeActivity, "Good, video is playing fine", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onStopped() {
+            Toast.makeText(this@YoutubeActivity, "Video has stopped", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onPaused() {
+            Toast.makeText(this@YoutubeActivity, "Video has paused", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val playerStateChangeListener = object: YouTubePlayer.PlayerStateChangeListener {
+        override fun onAdStarted() {
+            Toast.makeText(this@YoutubeActivity, "Click Ad!", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onLoading() {
+        }
+
+        override fun onVideoStarted() {
+            Toast.makeText(this@YoutubeActivity, "Video started", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onLoaded(p0: String?) {
+        }
+
+        override fun onVideoEnded() {
+            Toast.makeText(this@YoutubeActivity, "Congratulations, you have completed another video", Toast.LENGTH_SHORT).show()
+        }
+
+        override fun onError(p0: YouTubePlayer.ErrorReason?) {
         }
     }
 }
